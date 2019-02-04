@@ -1,0 +1,33 @@
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="saiku-client tests">
+            <directory>./test</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+
+    <groups>
+        <exclude>
+            <!-- don't run integration tests by default -->
+            <group>integration</group>
+        </exclude>
+    </groups>
+
+    <php>
+        <var name="SAIKU_URL" value="http://localhost:8080/saiku/" />
+        <var name="SAIKU_USERNAME" value="" />
+        <var name="SAIKU_PASSWORD" value="" />
+        <var name="SAIKU_LICENSE" value="./license.lic"/>
+
+        <!--
+          Set to true to dump requests and responses from integration tests.
+          Use this to generate mock responses for other tests.
+        -->
+        <var name="DUMP_HISTORY" value="0"/>
+    </php>
+</phpunit>

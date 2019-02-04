@@ -1,0 +1,60 @@
+{
+  "name": "kynx/saiku-backup",
+  "description": "PHP backup utility for Saiku Analytics",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Matt Kynaston",
+      "email": "matt@kynx.org"
+    }
+  ],
+  "keywords":[
+    "saiku",
+    "backup",
+    "analytics",
+    "bi",
+    "business intelligence",
+    "report",
+    "chart"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kynx\\Saiku\\Backup\\":"src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "KynxTest\\Saiku\\Backup\\":"test/"
+    }
+  },
+  "require": {
+    "php":">=7.1",
+    "ext-json":"*",
+    "kynx/saiku-client": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5",
+    "zendframework/zend-coding-standard": "^1.0"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "check": [
+      "@cs-check",
+      "@test"
+    ],
+    "cs-check": "phpcs",
+    "cs-fix": "phpcbf",
+    "test": "phpunit --colors=always",
+    "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+    "upload-coverage": "coveralls -v"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:kynx/saiku-client.git"
+    }
+  ]
+}
