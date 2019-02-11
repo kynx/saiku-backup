@@ -12,7 +12,7 @@ use Kynx\Saiku\Backup\Entity\Backup;
 use Kynx\Saiku\Client\Entity\AbstractNode;
 use Kynx\Saiku\Client\Entity\File;
 use Kynx\Saiku\Client\Entity\Folder;
-use Kynx\Saiku\Client\SaikuClient;
+use Kynx\Saiku\Client\Saiku;
 
 final class SaikuRestore
 {
@@ -21,7 +21,7 @@ final class SaikuRestore
     private $client;
     private $includeLicense;
 
-    public function __construct(SaikuClient $client, bool $includeLicense = false)
+    public function __construct(Saiku $client, bool $includeLicense = false)
     {
         $this->client = $client;
         $this->includeLicense = $includeLicense;
@@ -42,79 +42,79 @@ final class SaikuRestore
     {
         $license = $backup->getLicense();
         if ($license !== null) {
-            $this->client->storeResource($license);
+            $this->client->license()->set($license);
         }
     }
 
     private function restoreUsers(Backup $backup): void
     {
         $existing = $restored = [];
-        foreach ($this->client->getUsers() as $user) {
+        foreach ($this->client->user()->getAll() as $user) {
             $existing[$user->getUsername()] = $user;
         }
 
         foreach ($backup->getUsers() as $user) {
             $userName = $user->getUsername();
             if (isset($existing[$userName])) {
-                $this->client->updateUserAndPassword($user);
+                $this->client->user()->updatePassword($user);
             } else {
-                $this->client->createUser($user);
+                $this->client->user()->create($user);
             }
             $restored[$userName] = $user;
         }
 
         foreach (array_diff_key($existing, $restored) as $user) {
-            $this->client->deleteUser($user);
+            $this->client->user()->delete($user);
         }
     }
 
     private function restoreSchemas(Backup $backup): void
     {
         $existing = $restored = [];
-        foreach ($this->client->getSchemas() as $schema) {
+        foreach ($this->client->schema()->getAll() as $schema) {
             $existing[$schema->getName()] = $schema;
         }
 
         foreach ($backup->getSchemas() as $schema) {
             $schemaName = $schema->getName();
             if (isset($existing[$schemaName])) {
-                $this->client->updateSchema($schema);
+                $this->client->schema()->update($schema);
             } else {
-                $this->client->createSchema($schema);
+                $this->client->schema()->create($schema);
             }
             $restored[$schemaName] = $schema;
         }
 
         foreach (array_diff_key($existing, $restored) as $schema) {
-            $this->client->deleteSchema($schema);
+            $this->client->schema()->delete($schema);
         }
     }
 
     private function restoreDatasources(Backup $backup): void
     {
         $existing = $restored = [];
-        foreach ($this->client->getDatasources() as $datasource) {
+        foreach ($this->client->datasource()->getAll() as $datasource) {
             $existing[$datasource->getId()] = $datasource;
         }
 
         foreach ($backup->getDatasources() as $datasource) {
             $datasourceId = $datasource->getId();
             if (isset($existing[$datasourceId])) {
-                $this->client->updateDatasource($datasource);
+                $this->client->datasource()->update($datasource);
             } else {
-                $this->client->createDatasource($datasource);
+                $this->client->datasource()->create($datasource);
             }
             $restored[$datasourceId] = $datasource;
         }
 
         foreach (array_diff_key($existing, $restored) as $datasource) {
-            $this->client->deleteDatasource($datasource);
+            $this->client->datasource()->delete($datasource);
         }
     }
 
     private function restoreHomes(Backup $backup): void
     {
-        $homes = $this->getHomes($this->client->getRespository());
+        $homes = $this->getHomes($this->client->repository()->get());
         $existing = iterator_to_array($this->flattenRepo($homes));
         $restored = [];
 
@@ -122,19 +122,19 @@ final class SaikuRestore
             $path = $resource->getPath();
             // 500 error if you try and POST an existing folder
             if ($resource instanceof File || ! isset($existing[$path])) {
-                $this->client->storeResource($resource);
+                $this->client->repository()->storeResource($resource);
             }
 
             $acl = $backup->getAcl($path);
             if ($acl !== null) {
-                $this->client->setAcl($path, $acl);
+                $this->client->repository()->setAcl($path, $acl);
             }
 
             $restored[$path] = $resource;
         }
 
         foreach (array_diff_key($existing, $restored) as $resource) {
-            $this->client->deleteResource($resource);
+            $this->client->repository()->deleteResource($resource);
         }
     }
 

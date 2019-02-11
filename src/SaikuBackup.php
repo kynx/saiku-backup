@@ -13,7 +13,7 @@ use Kynx\Saiku\Client\Entity\AbstractNode;
 use Kynx\Saiku\Client\Entity\Acl;
 use Kynx\Saiku\Client\Entity\File;
 use Kynx\Saiku\Client\Entity\Folder;
-use Kynx\Saiku\Client\SaikuClient;
+use Kynx\Saiku\Client\Saiku;
 
 final class SaikuBackup
 {
@@ -22,7 +22,7 @@ final class SaikuBackup
     private $client;
     private $includeLicense;
 
-    public function __construct(SaikuClient $client, bool $includeLicense = false)
+    public function __construct(Saiku $client, bool $includeLicense = false)
     {
         $this->client = $client;
         $this->includeLicense = $includeLicense;
@@ -32,7 +32,7 @@ final class SaikuBackup
     {
         $backup = new Backup();
 
-        $repository = $this->client->getRespository(true);
+        $repository = $this->client->repository()->get(true);
 
         if ($this->includeLicense) {
             $backup->setLicense($this->getLicense($repository));
@@ -46,15 +46,16 @@ final class SaikuBackup
             }
         }
 
-        foreach ($this->client->getUsers() as $user) {
+        foreach ($this->client->user()->getAll() as $user) {
             $backup->addUser($user);
         }
 
-        foreach ($this->client->getSchemas(true) as $schema) {
+        foreach ($this->client->schema()->getAll() as $schema) {
+            $schema->setXml($this->client->repository()->getResource($schema->getPath()));
             $backup->addSchema($schema);
         }
 
-        foreach ($this->client->getDatasources() as $datasource) {
+        foreach ($this->client->datasource()->getAll() as $datasource) {
             $backup->addDatasource($datasource);
         }
 
@@ -69,16 +70,16 @@ final class SaikuBackup
     private function getAcls(AbstractNode $node)
     {
         $path = $node->getPath();
-        $acl = $this->client->getAcl($node->getPath());
+        $acl = $this->client->repository()->getAcl($node->getPath());
         if ($acl !== null) {
-            yield $path => $this->client->getAcl($node->getPath());
+            yield $path => $acl;
         }
 
         if ($node instanceof Folder) {
             foreach ($node->getRepoObjects() as $child) {
                 foreach ($this->getAcls($child) as $path => $acl) {
                     if ($acl !== null) {
-                        yield $path => $this->client->getAcl($node->getPath());
+                        yield $path => $acl;
                     }
                 }
             }
