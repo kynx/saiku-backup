@@ -50,11 +50,5 @@
     "test": "phpunit --colors=always",
     "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
     "upload-coverage": "coveralls -v"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:kynx/saiku-client.git"
-    }
-  ]
+  }
 }

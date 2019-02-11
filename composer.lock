@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "974cfd13aa49f6dd02820a8d141ae94a",
-    "content-hash": "3ec4719467971c8905345925c2342ba7",
+    "hash": "c05fd0771cf686ced9bea54304a45934",
+    "content-hash": "17cbcdb891648fac5eb8091f888a3e61",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -192,16 +192,16 @@
         },
         {
             "name": "kynx/saiku-client",
-            "version": "dev-master",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kynx/saiku-client.git",
-                "reference": "f91d685798289fec7f1f946353ed23778a2ba06b"
+                "reference": "50e9fb54b349526e9f3e2938580f65cce1abba13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kynx/saiku-client/zipball/f91d685798289fec7f1f946353ed23778a2ba06b",
-                "reference": "f91d685798289fec7f1f946353ed23778a2ba06b",
+                "url": "https://api.github.com/repos/kynx/saiku-client/zipball/50e9fb54b349526e9f3e2938580f65cce1abba13",
+                "reference": "50e9fb54b349526e9f3e2938580f65cce1abba13",
                 "shasum": ""
             },
             "require": {
@@ -210,8 +210,10 @@
                 "php": ">=7.1"
             },
             "require-dev": {
+                "kynx/saiku-backup": "dev-master",
                 "phpunit/phpunit": "^7.5",
-                "zendframework/zend-coding-standard": "^1.0"
+                "webimpress/coding-standard": "dev-master",
+                "zendframework/zend-coding-standard": "2.0.x-dev"
             },
             "type": "library",
             "autoload": {
@@ -219,32 +221,7 @@
                     "Kynx\\Saiku\\Client\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "KynxTest\\Saiku\\Client\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ],
-                "upload-coverage": [
-                    "coveralls -v"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -256,18 +233,14 @@
             ],
             "description": "Client for Saiku's REST API",
             "keywords": [
+                "BI",
                 "analytics",
-                "bi",
                 "business intelligence",
                 "chart",
                 "report",
                 "saiku"
             ],
-            "support": {
-                "source": "https://github.com/kynx/saiku-client/tree/master",
-                "issues": "https://github.com/kynx/saiku-client/issues"
-            },
-            "time": "2019-02-04 16:59:32"
+            "time": "2019-02-11 11:24:26"
         },
         {
             "name": "psr/http-message",
@@ -1034,16 +1007,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.3",
+            "version": "7.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2cb759721e53bc05f56487f628c6b9fbb6c18746"
+                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2cb759721e53bc05f56487f628c6b9fbb6c18746",
-                "reference": "2cb759721e53bc05f56487f628c6b9fbb6c18746",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2896657da5fb237bc316bdfc18c2650efeee0dc0",
+                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0",
                 "shasum": ""
             },
             "require": {
@@ -1114,7 +1087,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-02-01 05:24:07"
+            "time": "2019-02-07 14:15:04"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1941,9 +1914,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "kynx/saiku-client": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
