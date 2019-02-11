@@ -115,10 +115,10 @@ final class SaikuRestore
     private function restoreHomes(Backup $backup): void
     {
         $homes = $this->getHomes($this->client->repository()->get());
-        $existing = iterator_to_array($this->flattenRepo($homes));
+        $existing = iterator_to_array($this->depthFirst($homes));
         $restored = [];
 
-        foreach ($this->flattenRepo($backup->getHomes()) as $resource) {
+        foreach ($this->breadthFirst($backup->getHomes()) as $resource) {
             $path = $resource->getPath();
             // 500 error if you try and POST an existing folder
             if ($resource instanceof File || ! isset($existing[$path])) {
@@ -143,16 +143,34 @@ final class SaikuRestore
      *
      * @return \Generator|AbstractNode[]
      */
-    private function flattenRepo(Folder $folder)
+    private function breadthFirst(Folder $folder)
     {
         foreach ($folder->getRepoObjects() as $object) {
             yield $object->getPath() => $object;
 
             if ($object instanceof Folder) {
-                foreach ($this->flattenRepo($object) as $path => $child) {
+                foreach ($this->breadthFirst($object) as $path => $child) {
                     yield $path => $child;
                 }
             }
+        }
+    }
+
+    /**
+     * @param Folder $folder
+     *
+     * @return \Generator|AbstractNode[]
+     */
+    private function depthFirst(Folder $folder)
+    {
+        foreach ($folder->getRepoObjects() as $object) {
+            if ($object instanceof Folder) {
+                foreach ($this->depthFirst($object) as $path => $child) {
+                    yield $path => $child;
+                }
+            }
+
+            yield $object->getPath() => $object;
         }
     }
 }

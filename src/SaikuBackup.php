@@ -32,7 +32,7 @@ final class SaikuBackup
     {
         $backup = new Backup();
 
-        $repository = $this->client->repository()->get(true);
+        $repository = $this->client->repository()->get(null, true);
 
         if ($this->includeLicense) {
             $backup->setLicense($this->getLicense($repository));
