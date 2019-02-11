@@ -30,12 +30,14 @@
   },
   "require": {
     "php":">=7.1",
-    "ext-json":"*",
-    "kynx/saiku-client": "^0.5"
+    "ext-json":"*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.5",
     "zendframework/zend-coding-standard": "^1.0"
+  },
+  "suggest": {
+    "kynx/saiku-client": "You *must* require this: we don't because it's of circular dependencies"
   },
   "config": {
     "sort-packages": true
